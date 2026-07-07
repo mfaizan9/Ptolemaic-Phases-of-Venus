@@ -1,0 +1,169 @@
+/* =============================================================================
+ * Phases of Venus (Ptolemaic) -- SIM-SPECIFIC styles only.
+ * Layered on top of the KL-UNL foundation (foundation/kl-unl.css); the
+ * foundation files are never edited. Uses foundation CSS custom properties
+ * and rem/relative units so the layout reflows and zooms cleanly.
+ * ========================================================================== */
+
+/* Comfortably large, zoomable body text (>= 1.125rem floor). */
+body {
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+
+/* ---- Layout: diagram (flexible, left) + telescope column (right) ---------
+ * Mirrors the original screenshot (orbit left, telescope + button right).
+ * Overrides only the column template of the foundation .app-layout grid;
+ * collapses to a single stacked column at the foundation's 56rem breakpoint. */
+.sim-layout {
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: 1rem;
+  padding: 0.75rem;
+  align-items: stretch;   /* both panels share the same (row) height */
+}
+
+@media (max-width: 56rem) {
+  .sim-layout {
+    grid-template-columns: 1fr;   /* single-column phone-portrait layout */
+  }
+}
+
+/* ---- Panels -------------------------------------------------------------- */
+/* Flex columns so equal-height panels distribute their content cleanly. */
+.panel {
+  border-radius: 0.375rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.panel__heading {
+  font-size: 1.25rem;
+  background: var(--background-color, #fff);
+  border-bottom: var(--border-width, 1px) var(--border-style, solid)
+                 var(--border-color, #767676);
+}
+
+/* ---- Canvas stage: black "sky", scales to fit while preserving aspect ---- */
+.sim-canvas-wrap {
+  padding: 1rem;
+  display: flex;
+  align-items: center;       /* centre vertically in the equal-height box */
+  justify-content: center;
+  flex: 1 1 auto;            /* grow to fill the equal-height panel        */
+}
+
+.sim-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000000;
+  border-radius: 0.25rem;
+}
+
+/* Positioning context for the Sun/Venus drag handles overlaying the canvas. */
+.sim-stage {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.sim-stage--orbit {
+  max-width: 40rem;          /* 640px logical stage */
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+
+.sim-canvas--orbit {
+  max-width: 40rem;      /* 640px logical stage */
+  aspect-ratio: 1 / 1;
+}
+
+/* ---- Draggable / keyboard-operable handles (Sun, Venus) ------------------
+ * Transparent 44px hit targets centred on each object; JS sets left/top each
+ * render. Visible focus ring + grab cursor communicate that they are movable. */
+.sim-handle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;        /* dragging must not scroll/zoom the page */
+}
+
+.sim-handle:active {
+  cursor: grabbing;
+}
+
+.sim-handle:focus-visible {
+  outline: 0.1875rem solid var(--outline-color, #005fcc);
+  outline-offset: 0.125rem;
+  background: rgba(0, 95, 204, 0.18);
+}
+
+.sim-hint {
+  color: var(--foreground-color, #1a1a1a);
+  font-size: 0.95rem;
+}
+
+.sim-canvas--phase {
+  max-width: 15rem;      /* 240px logical stage */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* ---- Telescope caption + status ----------------------------------------- */
+.sim-caption {
+  margin: 0.75rem 1rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+
+.sim-status {
+  margin: 0.5rem 1rem 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-align: center;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 0.25rem;
+}
+
+/* ---- Control button ------------------------------------------------------ */
+.sim-button-row {
+  padding: 0.75rem 1rem 1rem;
+  justify-content: center;
+}
+
+.sim-button {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--button-foreground-color, #fff);
+  background: var(--button-background-color, #005a9c);
+  border: var(--border-width, 1px) var(--border-style, solid)
+          var(--border-color, #767676);
+  border-radius: 0.25rem;
+  width: 100%;
+  max-width: 16rem;
+}
+
+.sim-button:hover,
+.sim-button:focus {
+  filter: brightness(0.92);
+}
+
+/* ---- Reduced motion: nothing auto-animates (the animation is user-started
+ *      and stoppable), so no override is required; this simply documents the
+ *      intent and keeps transitions calm. ---------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sim-button { transition: none; }
+}

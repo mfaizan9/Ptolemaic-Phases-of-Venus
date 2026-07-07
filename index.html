@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phases of Venus (Ptolemaic model)</title>
+
+  <!-- KL-UNL foundation (copied UNCHANGED into foundation/) -->
+  <link href="foundation/kl-unl.css" type="text/css" rel="stylesheet" media="all">
+  <!-- Sim-specific styles only; never overrides the foundation -->
+  <link href="styles/styles.css" type="text/css" rel="stylesheet" media="all">
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- Title bar + Reset / About buttons + dialog are ALL provided by the
+         foundation masthead component. Reset dispatches "sim-reset". -->
+    <kl-unl-masthead sim-id="renaissancePtolemaic"
+                     json-url="foundation/contents.json"></kl-unl-masthead>
+
+    <main class="app-layout sim-layout">
+
+      <!-- ===================== Orbit view (primary diagram) ============== -->
+      <section class="panel panel--diagram" aria-labelledby="orbitHeading">
+        <h2 id="orbitHeading" class="panel__heading">Orbit View</h2>
+        <div class="panel__canvas-wrap sim-canvas-wrap">
+          <div class="sim-stage sim-stage--orbit">
+            <canvas id="orbitCanvas" class="sim-canvas sim-canvas--orbit"
+                    role="img" aria-label="Ptolemaic orbit diagram"
+                    aria-describedby="orbitDesc">
+            </canvas>
+            <!-- Focusable drag handles overlaying the Sun and Venus. Both are
+                 pointer-draggable and keyboard-operable (arrow / Page / Home / End). -->
+            <div id="sunHandle" class="sim-handle" role="slider" tabindex="0"
+                 aria-label="Sun position around Earth"
+                 aria-valuemin="0" aria-valuemax="360" aria-valuenow="0"
+                 aria-valuetext="Sun at 0 degrees around Earth"></div>
+            <div id="venusHandle" class="sim-handle" role="slider" tabindex="0"
+                 aria-label="Venus position on its epicycle"
+                 aria-valuemin="0" aria-valuemax="360" aria-valuenow="0"
+                 aria-valuetext="Venus at 0 degrees on its epicycle"></div>
+          </div>
+          <p id="orbitDesc" class="sr-only"></p>
+        </div>
+        <p class="panel__help sim-hint">Drag the Sun or Venus, or focus one (Tab) and
+          use the arrow keys, to change the configuration.</p>
+      </section>
+
+      <!-- ===================== Telescope view + control ================== -->
+      <section class="panel panel--telescope" aria-labelledby="scopeHeading">
+        <h2 id="scopeHeading" class="panel__heading">Telescope View</h2>
+
+        <p class="sim-caption">Venus as would be seen through a telescope in this configuration:</p>
+
+        <div class="panel__canvas-wrap sim-canvas-wrap">
+          <canvas id="phaseCanvas" class="sim-canvas sim-canvas--phase"
+                  role="img" aria-label="Venus through the telescope"
+                  aria-describedby="phaseDesc">
+          </canvas>
+          <p id="phaseDesc" class="sr-only"></p>
+        </div>
+
+        <p id="phaseStatus" class="sim-status" aria-hidden="true">Phase: new — 0% illuminated</p>
+
+        <div class="button-row sim-button-row">
+          <button id="playBtn" type="button" class="button sim-button"
+                  aria-pressed="false">Start animation</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Polite live region: announces state changes with spelled-out units -->
+    <p id="liveRegion" class="sr-only" aria-live="polite" role="status"></p>
+  </div>
+
+  <!-- Foundation scripts (unchanged) -->
+  <script src="foundation/kl-unl-masthead.js"></script>
+  <script src="foundation/kl-unl.js"></script>
+  <!-- Simulation logic -->
+  <script src="simulation.js"></script>
+</body>
+</html>
